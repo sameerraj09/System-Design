@@ -201,3 +201,33 @@ Most applications require a much higher ratio of reads to writes; thus, the numb
 -  The missing data needs to be updated by running data recovery scripts.
 
 ![image](https://github.com/user-attachments/assets/5bdbbcc6-3c1c-4302-a083-bafdbe11178b)
+
+
+Now, you have a solid understanding of the web and data tiers, it is time to improve the
+ load/response time.
+
+
+**Cache:-**
+-A cache is a temporary storage area that stores the result of expensive responses or frequently
+ accessed data in memory so that subsequent requests are served more quickly. 
+ 
+** Cache tier**
+- The cache tier is a temporary data store layer, much faster than the database.
+ - The benefits of having a separate cache tier include better system performance, ability to reduce database workloads, and the ability to scale the cache tier independently.
+
+![image](https://github.com/user-attachments/assets/b40c2db6-6c9b-4a05-9487-d0e442c33eef)
+
+ This caching strategy is called a read-through cache.
+ ![image](https://github.com/user-attachments/assets/156f718f-b46a-45c1-af31-4add5d7c6811)
+
+** Considerations for using cache**
+
+-**Decide when to use cache**. Consider using cache when data is read frequently but modified infrequently. 
+- **Expiration policy.** It is a good practice to implement an expiration policy.Meanwhile, it is advisable not to make the expiration date too long as the data can become stale or too short.
+-Consistency: This involves keeping the data store and the cache in sync.
+- **Consistency**: Ensures the data store and cache are in sync, which is challenging across regions since cache and database updates don’t occur in a single transaction.
+
+- **Mitigating Failures**: Using multiple cache servers across data centers prevents single points of failure (SPOF) and improves reliability. Overprovisioning memory also helps handle increased usage.
+![image](https://github.com/user-attachments/assets/fabc321b-4d61-425b-889e-31a8a42ef3d3)
+
+- **Eviction Policy**: When cache is full, older items are removed to make space. Common policies include Least Recently Used (LRU), Least Frequently Used (LFU), and First In, First Out (FIFO).
