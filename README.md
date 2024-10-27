@@ -31,3 +31,53 @@ System design is essentially the process of defining the architecture, component
    - **Monitoring and Logging**: Tracks system health and detects issues early.
 
 In a nutshell, system design is about piecing together software components thoughtfully so that the whole system performs well, scales as needed, and meets user expectations. It requires balancing simplicity and efficiency with future growth in mind.
+
+
+
+**Flow for a single server system :-**
+
+How we browse a website
+
+![image](https://github.com/user-attachments/assets/92ebe602-039e-4d0f-84c2-7b228217138f)
+
+- Non-Relational databases are also called NoSQL databases. 
+Popular ones are CouchDB, Neo4j, Cassandra, HBase, Amazon DynamoDB, etc. [2].
+These databases are grouped into four categories: key-value stores, graph stores, column stores, and document stores. Join operations are generally not supported in non-relational databases
+
+**Why nosql:-**
+![image](https://github.com/user-attachments/assets/a8d18283-889a-4540-8a43-e272312864d9)
+
+![image](https://github.com/user-attachments/assets/24930d13-b67e-447a-a911-cc593c4f0a7a)
+
+**Here are the key points:**
+
+1. **Vertical Scaling (Scale-Up)**:
+   - Involves adding more power (CPU, RAM) to a single server.
+   - Suitable for low traffic scenarios due to its simplicity.
+   - **Limitations**:
+     - **Hard limit**: Cannot add unlimited CPU or memory to one server.
+     - **No failover/redundancy**: If the server goes down, the entire application/website goes offline.
+
+2. **Horizontal Scaling (Scale-Out)**:
+   - Involves adding more servers to handle traffic.
+   - Preferred for large-scale applications due to vertical scaling limitations.
+   - Adds more reliability, redundancy, and can handle higher traffic loads.
+
+3. **Problems with Direct Web Server Connection**:
+   - Users cannot access the site if the web server is offline.
+   - When many users access the server simultaneously, it can exceed the server’s load limit, leading to slow responses or connection failures.
+
+4. **Load Balancer**:
+   - Distributes incoming traffic evenly among multiple web servers.
+   - Helps manage load and prevent issues like server overload or downtime.
+   - Essential for high availability and smooth scaling in large-scale applications.
+
+![image](https://github.com/user-attachments/assets/eb93db5e-b50f-489a-811a-5c692c49e617)
+
+-As shown in Figure 1-4, users connect to the public IP of the load balancer directly.
+-With this setup, web servers are unreachable directly by clients anymore. For better security, private IPs are used for communication between servers. 
+-A private IP is an IP address reachable only between servers in the same network; however, it is unreachable over the internet.
+-The load balancer communicates with web servers through private Ips
+
+![image](https://github.com/user-attachments/assets/2836685b-2c05-4444-b2c7-e2e729641ec6)
+
