@@ -39,12 +39,15 @@ In a nutshell, system design is about piecing together software components thoug
 How we browse a website
 
 ![image](https://github.com/user-attachments/assets/92ebe602-039e-4d0f-84c2-7b228217138f)
+![image](https://github.com/user-attachments/assets/f1cfed17-baad-433d-b3f1-909dfc7c910b)
+![image](https://github.com/user-attachments/assets/2a76c525-4b87-4600-8f99-c087569559ec)
 
 - Non-Relational databases are also called NoSQL databases. 
 Popular ones are CouchDB, Neo4j, Cassandra, HBase, Amazon DynamoDB, etc. [2].
 These databases are grouped into four categories: key-value stores, graph stores, column stores, and document stores. Join operations are generally not supported in non-relational databases
 
 **Why nosql:-**
+
 ![image](https://github.com/user-attachments/assets/a8d18283-889a-4540-8a43-e272312864d9)
 
 ![image](https://github.com/user-attachments/assets/24930d13-b67e-447a-a911-cc593c4f0a7a)
@@ -79,5 +82,4 @@ These databases are grouped into four categories: key-value stores, graph stores
 -A private IP is an IP address reachable only between servers in the same network; however, it is unreachable over the internet.
 -The load balancer communicates with web servers through private Ips
 
-![image](https://github.com/user-attachments/assets/2836685b-2c05-4444-b2c7-e2e729641ec6)
 
