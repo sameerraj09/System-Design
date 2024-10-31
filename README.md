@@ -231,3 +231,59 @@ Now, you have a solid understanding of the web and data tiers, it is time to imp
 ![image](https://github.com/user-attachments/assets/fabc321b-4d61-425b-889e-31a8a42ef3d3)
 
 - **Eviction Policy**: When cache is full, older items are removed to make space. Common policies include Least Recently Used (LRU), Least Frequently Used (LFU), and First In, First Out (FIFO).
+
+**DAY 3**
+
+**Content delivery network (CDN) **
+
+
+- Here is how CDN works at the high-level: when a user visits a website, a CDN server closest
+ to the user will deliver static content. Intuitively, the further users are from CDN servers, the
+ slower the website loads. For example, if CDN servers are in San Francisco, users in Los
+ Angeles will get content faster than users in Europe.
+![image](https://github.com/user-attachments/assets/9f50950a-bf8d-416e-b13f-18c9e1520c25)
+
+1. User A requests `image.png` from a CDN URL (e.g., `https://mysite.cloudfront.net/logo.jpg`).
+2. If the image isn’t in the CDN cache, the CDN fetches it from the origin server (e.g., Amazon S3).
+3. The origin server sends `image.png` to the CDN, optionally including a TTL header.
+4. The CDN caches `image.png` and serves it to User A.
+5. User B requests the same image.
+6. The CDN serves the cached image to User B if the TTL hasn’t expired.
+
+**Considerations for Using a CDN:**
+
+- **Cost:** CDNs charge for data transfers; avoid caching rarely used assets to save on costs.
+- **Cache Expiry:** Set appropriate expiry times for content. Too long, and content may be stale; too short, and it causes frequent origin reloads.
+- **CDN Fallback:** Plan for fallback solutions if the CDN fails, allowing clients to retrieve content from the origin server.
+- **File Invalidations:** To remove files before expiry:
+  - Invalidate the object via the CDN’s API.
+  - Use versioning in the URL (e.g., `image.png?v=2`) to serve updated content.
+ 
+  ![image](https://github.com/user-attachments/assets/018d6d52-cf55-4a51-a9b7-add1b2b5558b)
+
+  **Stateless Web Tier Summary:**
+
+- **Scaling Web Tier Horizontally:** To scale, user session data must be moved out of the web servers to persistent storage (e.g., databases).
+- **Stateful Limitation:** With session data stored on specific servers, all requests from the same user (e.g., User A) must always go to the same server (e.g., Server 1).
+- **Sticky Sessions:** Load balancers use sticky sessions to route users to the same server, but this adds complexity and challenges for scaling and handling failures.
+- **Stateless vs. Stateful Servers:** 
+  - **Stateful Server:** Retains client data across requests.
+  - **Stateless Server:** Does not retain any client data, making scaling and recovery easier.
+
+  -In this stateless architecture, HTTP requests from users can be sent to any web servers, which
+   fetch state data from a shared data store. State data is stored in a shared data store and kept
+   out of web servers. A stateless system is simpler, more robust, and scalable.
+  
+  ![image](https://github.com/user-attachments/assets/f43b5cfc-a4bd-4a73-b8b1-410b47a11cb2)
+
+  **Stateless:-**
+
+![image](https://github.com/user-attachments/assets/19f33b2f-ad24-488a-96b5-d0d6babc87a7)
+
+
+![image](https://github.com/user-attachments/assets/affbb823-27f5-46ab-8659-72aeb0eb2189)
+
+-  To scale the web tier, session data is stored in a shared, scalable data store (like NoSQL, Redis, or Memcached) outside of the web servers. This setup enables **autoscaling**, allowing web servers to be added or removed based on traffic load.
+-  As the website grows globally, using multiple data centers helps improve availability and provides a better user experience across different regions.
+
+-  
