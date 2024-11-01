@@ -286,4 +286,76 @@ Now, you have a solid understanding of the web and data tiers, it is time to imp
 -  To scale the web tier, session data is stored in a shared, scalable data store (like NoSQL, Redis, or Memcached) outside of the web servers. This setup enables **autoscaling**, allowing web servers to be added or removed based on traffic load.
 -  As the website grows globally, using multiple data centers helps improve availability and provides a better user experience across different regions.
 
--  
+**DAY 4**
+
+**Data centers**
+
+ - Figure 1-15 shows an example setup with two data centers. In normal operation, users are
+ geoDNS-routed, also known as geo-routed, to the closest data center, with a split traffic of
+ x% in US-East and (100 – x)% in US-West. geoDNS is a DNS service that allows domain
+ names to be resolved to IP addresses based on the location of a user
+![image](https://github.com/user-attachments/assets/9f2db28b-63c7-4cbf-9fd7-61a76586f920)
+-  In Figure 1-16, data center 2 (US-West) is offline, and 100% of the traffic is routed to data
+ center 1 (US-East)
+![image](https://github.com/user-attachments/assets/21013334-16b0-4a8c-ab34-a82164b38c4a)
+
+For a scalable multi-data center setup:
+
+1. **Traffic Redirection**: Use GeoDNS to send users to the nearest data center for faster access.
+  
+2. **Data Syncing**: Keep data copies in all data centers to prevent data loss during failovers.
+  
+3. **Testing & Deployment**: Automate deployments to keep updates consistent across data centers.
+
+4. **Message Queues**: Use queues to handle tasks independently, making it easy to add resources as needed.
+
+5. **Monitoring**: Set up logging, metrics, and automation for error tracking, system health, and efficient updates.
+
+6. **Database Scaling**: As data grows, adjust the database setup to handle more load.
+
+**Message Queue:**
+![image](https://github.com/user-attachments/assets/3b8e2728-7700-472a-99ec-02cb5e1b36a7)
+
+-Enables asynchronous communication between producers and consumers.
+-Helps decouple systems for independent scaling and resilience.
+-Useful for tasks like photo processing, where jobs are queued and handled by workers.
+
+
+-Figure 1-18, web servers publish photo processing jobs to the message queue. 
+-Photo processing workers pick up jobs from the message queue and asynchronously perform photo
+ customization tasks. 
+-The producer and the consumer can be scaled independently. When the size of the queue becomes large, more workers are added to reduce the processing time.
+ However, if the queue is empty most of the time, the number of workers can be reduced.
+
+![image](https://github.com/user-attachments/assets/d5929fa6-8c70-4ced-967c-79eb1c79138c)
+
+
+**Logging, Metrics, and Automation:**
+
+**Logging:** Tracks errors and issues, often centralized for easier monitoring.
+**Metrics:** Monitors health and performance (e.g., CPU, memory, business metrics).
+**Automation:** Speeds up testing, building, and deployment; useful in large, complex systems.
+
+ **Database Scaling**:
+   - **Vertical Scaling**: Add more resources (CPU, RAM) to one server, but it has limits and is costly.
+   - **Horizontal Scaling (Sharding)**: Splits data across multiple servers to handle more load.
+
+     ![image](https://github.com/user-attachments/assets/38c7f741-e42a-409f-9bff-304a7ac933f7)
+
+
+   - **Challenges**: Includes data redistribution (resharding) and issues with hotspot data (celebrity problem).
+
+
+![image](https://github.com/user-attachments/assets/803826d7-bbe8-4ea3-877d-025eb026077e)
+
+**Best Practices for Scaling to Millions**:
+   - Make web servers stateless.
+   - Add redundancy at each level.
+   - Use caching to reduce load.
+   - Set up multiple data centers.
+   - Store static files in a CDN.
+   - Shard your database for scaling.
+   - Split system tiers into smaller, manageable services.
+   - Continuously monitor and automate wherever possible.
+
+These steps help achieve a scalable, resilient, and efficient system for millions of users.
