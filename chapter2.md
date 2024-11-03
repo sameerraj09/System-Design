@@ -28,14 +28,10 @@
  
  • tweet_id   64 bytes
  
- • text 
+ • text    140 bytes
  
-• media 
+ • media   1 MB
 
-140 bytes
-
- 1 MB
- 
  • Media storage: 150 million * 2 * 10% * 1 MB = 30 TB per day
  
  • 5-year media storage: 30 TB * 365 * 5 = ~55 PB
