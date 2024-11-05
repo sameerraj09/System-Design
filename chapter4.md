@@ -106,7 +106,7 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Leaking Bucket Algorithm
 ![image](https://github.com/user-attachments/assets/84f3a271-644b-41a9-b4c9-974deeb7b3d2)
-![image](https://github.com/user-attachments/assets/06ed4e24-b758-4245-8b7f-4a5de703c819)
+
 
 - **How it works**:
    - Similar to token bucket but processes requests at a **fixed rate**.
@@ -124,6 +124,8 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Fixed Window Counter Algorithm
 - **How it works**:
+![image](https://github.com/user-attachments/assets/d6234982-b5ec-40cb-9499-42c8307f3b45)
+
    - Divides time into **fixed windows** (e.g., seconds, minutes), counting requests within each.
    - If requests exceed the limit in a window, extras are dropped until the next window.
 - **Example**: Allows 3 requests per second. If more than 3 arrive within one second, extra ones are blocked.
@@ -136,6 +138,8 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Sliding Window Log Algorithm
 - **How it works**:
+![image](https://github.com/user-attachments/assets/8d380484-65f0-46b7-ae0f-047d39c02db0)
+
    - Keeps a **log of request timestamps** to limit requests within a rolling time window.
    - Old timestamps (outside the window) are removed. If the log size is within the limit, the request is allowed; otherwise, it’s blocked.
 - **Example**: Allows 2 requests per minute, using a rolling timestamp log.
@@ -148,6 +152,8 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Sliding Window Counter Algorithm
 - **How it works**:
+![image](https://github.com/user-attachments/assets/4112adfd-8829-4c75-87e4-9c9db80f3e57)
+
    - Combines **fixed window counter** and **sliding window log** for smoother traffic.
    - Calculates the request rate using the current and previous windows, based on overlap.
 - **Example**: If 7 requests per minute is the limit, requests are distributed across the current and previous minute.
