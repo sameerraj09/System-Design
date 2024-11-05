@@ -109,6 +109,7 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 
 - **How it works**:
+  
    - Similar to token bucket but processes requests at a **fixed rate**.
    - Uses a **FIFO (first-in-first-out) queue**: requests are added to the queue until it’s full, then they’re dropped.
 - **Parameters**:
@@ -124,6 +125,7 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Fixed Window Counter Algorithm
 - **How it works**:
+  
 ![image](https://github.com/user-attachments/assets/d6234982-b5ec-40cb-9499-42c8307f3b45)
 
    - Divides time into **fixed windows** (e.g., seconds, minutes), counting requests within each.
@@ -138,6 +140,7 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Sliding Window Log Algorithm
 - **How it works**:
+  
 ![image](https://github.com/user-attachments/assets/8d380484-65f0-46b7-ae0f-047d39c02db0)
 
    - Keeps a **log of request timestamps** to limit requests within a rolling time window.
@@ -152,6 +155,7 @@ Here’s a summary of each algorithm with the main points retained in simple ter
 
 ### Sliding Window Counter Algorithm
 - **How it works**:
+  
 ![image](https://github.com/user-attachments/assets/4112adfd-8829-4c75-87e4-9c9db80f3e57)
 
    - Combines **fixed window counter** and **sliding window log** for smoother traffic.
