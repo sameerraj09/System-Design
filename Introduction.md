@@ -165,11 +165,13 @@ These databases are grouped into four categories: key-value stores, graph stores
 
 -As shown in Figure 1-4, users connect to the public IP of the load balancer directly.
 -With this setup, web servers are unreachable directly by clients anymore. For better security, private IPs are used for communication between servers. 
--A** private IP **is an IP address reachable only between servers in the same network; however, it is unreachable over the internet.
+
+**-A** private IP ****is an IP address reachable only between servers in the same network; however, it is unreachable over the internet.
 -The load balancer communicates with web servers through private Ips
 
 
 **DAY - 2**
+
 -In Figure 1-4, after a load balancer and a second web server are added,
 we successfully solved no failover issue and improved the availability of the web tier. 
 -If server 1 goes offline, all the traffic will be routed to server 2.
