@@ -5,11 +5,9 @@
    - The primary goal is to ensure efficient and balanced load distribution while minimizing disruptions when servers are added or removed.
 
 2. **Traditional Hashing Issue**:
-   - In a system with \( N \) servers, data is distributed using the formula:
-     \[
-     \text{serverIndex} = \text{hash(key)} \% N
-     \]
-   - For example, if \( \text{hash(key0)} \% 4 = 1 \), the data for `key0` is stored in server 1.
+![image](https://github.com/user-attachments/assets/2246f6d7-9625-4295-a028-5ff468f32fb6)
+
+   -  For Example For instance, hash(key0) % 4 = 1 means a client must contact server 1 to fetch the cached data.
   
 ![image](https://github.com/user-attachments/assets/9386b042-92f8-48a7-b583-ef2a81607a75)
 
@@ -153,4 +151,4 @@ This limited redistribution ensures minimal disruption and efficient scaling.
 ![image](https://github.com/user-attachments/assets/17b6466d-15ef-4f81-9f04-1b18a7bc6b1d)
 
 ![image](https://github.com/user-attachments/assets/e36f3414-7f8f-4e96-a5fd-478c67a9785e)
-Would you like to explore the implementation of finding affected keys or optimizing the number of virtual nodes?
+
