@@ -53,7 +53,9 @@ Example:
 
 3. **Dynamic Server Pool**:
    - **Adding a Server**:
-    When a **new server** is added:  
+     
+    When a **new server** is added:
+   
 1. The server is hashed and placed on the ring.  
 2. Only the keys that fall **between the new server's position** and the next server clockwise are redistributed.  
 
