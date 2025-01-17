@@ -56,8 +56,8 @@ Example:
      
     When a **new server** is added:
    
-1. The server is hashed and placed on the ring.  
-2. Only the keys that fall **between the new server's position** and the next server clockwise are redistributed.  
+   The server is hashed and placed on the ring.  
+   Only the keys that fall **between the new server's position** and the next server clockwise are redistributed.  
 
 ### Example (Figure 5-8):  
 - Before adding **Server 4**, **Key0** was stored on **Server 0**.  
