@@ -108,8 +108,6 @@
 
 ![image](https://github.com/user-attachments/assets/a09d3c44-dbf8-4761-9795-4675a0364666)
 
-![image](https://github.com/user-attachments/assets/25724fa5-1f3b-4143-a47c-bbe3bc5d9eee)
-
 #### 4. Inconsistency Resolution
 - **Problem**: Concurrent writes can cause data conflicts.
 - **Solution**:
