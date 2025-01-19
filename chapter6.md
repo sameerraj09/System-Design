@@ -81,6 +81,8 @@
     - Minimize data movement when nodes are added/removed.
   - Hash ring structure ensures efficient data placement.
 
+![image](https://github.com/user-attachments/assets/a5d9588e-7260-4493-95b6-b9a95d02929e)
+
 #### 2. Data Replication
 - **Why Replicate?**
   - Ensure high availability and reliability.
@@ -88,6 +90,8 @@
   - Replicate data asynchronously to multiple servers.
   - Place replicas in different data centers for disaster recovery.
   - Example: A key is stored on 3 unique servers based on hash ring traversal.
+
+![image](https://github.com/user-attachments/assets/928688a4-7450-4e00-a5f2-1b51be29b5b6)
 
 #### 3. Consistency
 - **Types**:
@@ -101,7 +105,9 @@
     - Fast writes: Set W = 1, R = N.
     - Fast reads: Set R = 1, W = N.
     - Strong consistency: Ensure W + R > N.
-      
+
+![image](https://github.com/user-attachments/assets/a09d3c44-dbf8-4761-9795-4675a0364666)
+
 ![image](https://github.com/user-attachments/assets/25724fa5-1f3b-4143-a47c-bbe3bc5d9eee)
 
 #### 4. Inconsistency Resolution
