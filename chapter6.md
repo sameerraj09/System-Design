@@ -121,6 +121,33 @@
 - **Temporary Failures**:
   - Use **sloppy quorum**: Write to any healthy servers temporarily.
   - **Hinted Handoff**: Temporarily store data elsewhere and sync back when the server recovers.
+
+  ### Notes on Decentralized Failure Detection: Gossip Protocol
+
+#### **Why Use Gossip Protocol?**
+- Efficient failure detection in distributed systems with many nodes.
+- Avoids inefficiencies of all-to-all communication.
+
+#### **How Gossip Protocol Works**
+1. **Node Membership List**: Each node maintains a list of member IDs and their heartbeat counters.
+2. **Heartbeat Counter**: 
+   - Nodes increment their heartbeat counter periodically.
+3. **Heartbeat Propagation**: 
+   - Nodes send their heartbeat to random nodes.
+   - These nodes further propagate the heartbeat to other random nodes.
+4. **Membership List Update**: 
+   - When a node receives a heartbeat, it updates its membership list with the latest info.
+5. **Failure Detection**: 
+   - If a node's heartbeat does not increment for a predefined time, it is marked as offline.
+
+#### **Advantages**
+- Scalable and decentralized.
+- Quickly detects node failures in large systems.
+  
+  ![image](https://github.com/user-attachments/assets/1d5a2b67-2899-49b6-93ae-b3650002c51d)
+
+![image](https://github.com/user-attachments/assets/6f9fd440-6089-4dbd-8b21-3869a8fcc4a2)
+
 - **Permanent Failures**:
   - Use **anti-entropy protocols** to synchronize replicas.
   - Employ **Merkle trees** to identify and resolve inconsistencies efficiently.
