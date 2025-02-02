@@ -117,3 +117,24 @@
   - Discussed in **Chapter 1**.
 
 ---
+Bloom Filter Example
+Assume we want to store URLs for a URL shortener service.
+
+We create a bit array of size 10,000 and use 3 hash functions.
+
+For each new URL, we:
+
+Apply Hash 1 → bit position 100 → Set to 1.
+Apply Hash 2 → bit position 5000 → Set to 1.
+Apply Hash 3 → bit position 8000 → Set to 1.
+To check if a URL exists:
+
+Run the same 3 hash functions.
+If all 3 bit positions are 1, the URL may exist.
+If at least one bit is 0, the URL definitely does not exist.
+Bloom Filter Properties
+✅ Space-Efficient: Requires far less memory than a hash table.
+✅ Fast: O(1) time complexity for insert and lookup.
+✅ No False Negatives: If a Bloom filter says an element isn’t in the set, it truly isn’t.
+❌ False Positives Possible: It may say an element exists when it doesn’t.
+
