@@ -72,112 +72,212 @@
 ![image](https://github.com/user-attachments/assets/22d96d15-5b91-490d-9642-336345b1beed)
 
 ---
+---
 
-## **Step 3: Design Deep Dive**  
-### **Graph Traversal: DFS vs BFS**  
-- The web is a **graph** with pages as **nodes** and links as **edges**.  
-- **BFS (Breadth-First Search)** is preferred over DFS because:  
-  - DFS goes too deep, wasting resources.  
-  - BFS allows downloading in a structured way (FIFO queue).  
+## **Graph Traversal: BFS vs DFS**
+A web crawler essentially navigates the **web as a graph**, where:
+- **Nodes** represent web pages.
+- **Edges** (links) connect pages to one another.
+
+To traverse this graph and discover new web pages, we need an efficient **graph traversal algorithm**. The two most common choices are:
+1. **Depth-First Search (DFS)**
+2. **Breadth-First Search (BFS)**
+
+### **Why BFS is Better Than DFS?**
+| Feature | DFS | BFS |
+|---------|-----|-----|
+| **Traversal Method** | Explores one path deeply before backtracking | Explores all neighbors before moving deeper |
+| **Memory Usage** | Lower (only needs to track one path) | Higher (stores all neighbors in a queue) |
+| **Best for Web Crawling?** | ❌ No – Can go too deep, missing important links | ✅ Yes – Covers wide areas first, ensuring better discovery |
+
+- **DFS Issue**: If a web page has deep nested links, DFS will continue crawling in one direction indefinitely, potentially missing high-value pages.
+- **BFS Advantage**: It ensures the crawler explores **more important and diverse** content first.
+
+📌 **Example**:
+Imagine we are crawling Wikipedia:
+- **DFS** may go from the **homepage → Science → Physics → Quantum Mechanics → Subatomic Particles**, taking a long time before reaching other important pages.
+- **BFS** will explore **Homepage → Science, Technology, Sports, History**, ensuring broader and faster coverage.
+
+Thus, BFS is the **preferred choice** for web crawling.
 
 
-![image](https://github.com/user-attachments/assets/cc3d4f26-d154-412f-8011-23124eea3136)
-
-
-### **URL Frontier (Figure 9-5, Figure 9-6, Figure 9-7, Figure 9-8)**  
-- Manages **politeness, priority, and freshness**.  
-- **Politeness**:  
-  - Avoid too many requests to the same site (prevents overload or bans).  
-  - Uses **per-host FIFO queues**.  
-
-
-![image](https://github.com/user-attachments/assets/f5b1055d-cd5c-4f9a-9c8c-76d4a0fbd9bc)
-![image](https://github.com/user-attachments/assets/bc6391d6-5276-4ab1-a545-e39fcfbf52d4)
-
-- **Priority**:  
-  - Some pages are more important (e.g., Apple homepage vs. random forum post).  
-  - Prioritizes URLs based on **PageRank, traffic, update frequency**.
- 
-![image](https://github.com/user-attachments/assets/b8227b3f-19c1-451a-9293-e69f5e7a2342)
-![image](https://github.com/user-attachments/assets/c1f9f11b-4500-4e97-a773-16d39a1ee4fc)
-
-
-- **Freshness**:  
-  - Pages change over time.  
-  - Recrawling strategy based on update history.  
-  - Important pages updated more frequently.  
-
-- **Storage Approach**:  
-  - Hybrid **memory + disk storage**.  
-  - Memory used for fast access.  
-  - Disk stores large amounts of data.  
+![image](https://github.com/user-attachments/assets/45030464-e807-49b2-967b-68a39b608c7f)
 
 ---
 
-## **HTML Downloader**  
-### **Robots.txt Handling**  
-- Websites use **robots.txt** to control crawler access.  
-- Example (Amazon robots.txt):  
-  ```
-  User-agent: Googlebot  
-  Disallow: /creatorhub/*  
-  ```  
-- Robots.txt results should be cached to avoid repeated downloads.  
+## **URL Frontier**
+A **URL Frontier** is a key data structure that manages the URLs waiting to be downloaded. It ensures:
+1. **Politeness** – Avoiding overloading the same website.
+2. **Prioritization** – Visiting high-value pages first.
+3. **Freshness** – Keeping data updated.
 
-### **Performance Optimization (Figure 9-9)**  
-1. **Distributed Crawling** – Multiple servers handle different URL sets.  
-2. **DNS Resolver Cache** – Reduces slow DNS lookup times.  
-3. **Locality Optimization** – Place crawlers closer to target websites.  
-4. **Timeouts** – Avoid long waits for unresponsive pages.  
+### **Challenges with a Simple FIFO Queue**
+If we only use a **simple FIFO queue**, the crawler will:
+1. Download too many pages from the **same site** (impolite).
+2. Ignore important pages from high-ranking websites.
+3. Be slow in updating frequently changing pages.
 
----
-
-## **Robustness & Extensibility**  
-- **Robustness Techniques**:  
-  - **Consistent hashing** – Distributes load among servers.  
-  - **Save crawl states** – Allows recovery from failures.  
-  - **Exception handling** – Prevent crashes due to errors.  
-  - **Data validation** – Prevents storage of bad data.  
-
-- **Extensibility (Figure 9-10)**:  
-  - Easily add new modules (e.g., **PNG Downloader**, **Web Monitor**).
-  - 
-![image](https://github.com/user-attachments/assets/d7542e38-bd3f-4cca-9549-47320e0eeb92)
+To fix these issues, **modern URL Frontiers** use:
+1. **Politeness Mechanism** (Figure 9-6)
+2. **Priority Scheduling** (Figure 9-7)
+3. **Hybrid Memory + Disk Storage** (Figure 9-8)
 
 ---
 
-## **Detect and Avoid Problematic Content**  
-### **1. Redundant Content**  
-- **30% of pages are duplicates**.  
-- Use **hashing** to detect and remove duplicates.  
+## **Politeness (Figure 9-6)**
+**Problem**: If a crawler sends too many requests to a single website (e.g., Wikipedia), it might:
+- Overload the website.
+- Get blocked by the server.
 
-### **2. Spider Traps**  
-- Some websites create infinite links to trap crawlers.  
-- Solution: **Set a max URL length or manually block such sites**.  
+**Solution**: We maintain **separate queues per website** to control the request rate.
 
-### **3. Data Noise**  
-- Avoid storing **ads, spam URLs, irrelevant content**.  
+### **How It Works?**
+1. **Queue Router**: Ensures each website has its own queue.
+2. **Mapping Table**: Maps each host (e.g., `wikipedia.org`) to a queue.
+3. **Queue Selector**: Assigns each queue to a download worker.
+4. **Worker Threads**: Ensure polite request delays.
 
----
+![image](https://github.com/user-attachments/assets/5fe89890-ed2c-4a53-94ef-7c2dce86eba2)
+![image](https://github.com/user-attachments/assets/4dc0c74e-d0b9-45a3-866c-cd38c20b6c94)
 
-## **Step 4: Wrap Up**  
-### **Key Takeaways**  
-- **Good web crawlers** must be **scalable, polite, extensible, and robust**.  
-- **Main components**: URL Frontier, HTML Downloader, Content Parser, Storage.  
-- **Key techniques**:  
-  - BFS-based crawling for efficiency.  
-  - Politeness enforcement to avoid overloading websites.  
-  - URL prioritization for important pages.  
-  - Freshness strategies for keeping data updated.  
-
-### **Additional Considerations**  
-- **Handling JavaScript/AJAX-generated content**.  
-- **Filtering spam pages**.  
-- **Database replication and sharding** for scaling.  
-- **Keeping crawlers stateless** for large-scale deployments.  
-- **Analyzing crawl data** for improvements.  
+📌 **Example**:  
+- A polite crawler might wait **1 second** before sending a second request to Wikipedia.
+- Meanwhile, it can download pages from other domains in parallel.
 
 ---
 
-### **Conclusion**  
-Building a **scalable web crawler** is challenging because of the **vast web size and various traps**. This design ensures efficiency, politeness, and scalability while handling complex scenarios like priority, storage, and freshness.  
+## **Priority Scheduling (Figure 9-7)**
+Some pages are more important than others. Instead of processing URLs in FIFO order, a **Prioritizer** ranks them based on:
+1. **PageRank** – Pages linked by many other sites are crawled first.
+2. **Traffic** – Highly visited pages (e.g., `bbc.com`) have higher priority.
+3. **Update Frequency** – Pages that change often (e.g., news sites) should be recrawled more frequently.
+
+### **How It Works?**
+1. **Prioritizer assigns scores to URLs.**
+2. **High-priority URLs are placed in front queues.**
+3. **Queue Selector picks URLs from high-priority queues first.**
+
+📌 **Example**:  
+- **A blog with 2 visitors/day** → Low priority.  
+- **Amazon homepage with millions of visits** → High priority.
+
+---
+![image](https://github.com/user-attachments/assets/00becd0b-ac3a-4062-a0c8-ee099ece4243)
+
+## **Freshness (Keeping Data Updated)**
+Web pages constantly change. If we **never revisit** a page, our data becomes outdated.
+
+### **Recrawling Strategies**
+1. **Recrawl based on past update patterns** (e.g., news sites update daily).
+2. **Prioritize frequently changing pages** (e.g., Twitter, e-commerce).
+3. **Use machine learning to predict update frequency.**
+
+---
+
+## **Storage for URL Frontier (Figure 9-8)**
+- **URLs are too many** (hundreds of millions).
+- **RAM is limited**, so we store most URLs on disk.
+- **Solution**: Hybrid **Memory + Disk** architecture.
+  - **Frequently accessed URLs in memory**.
+  - **Bulk storage on disk**.
+
+![image](https://github.com/user-attachments/assets/e96a7618-048c-45b7-9927-edbe7c822eda)
+
+📌 **Example**:
+- **Top 100,000 URLs** → Stored in RAM for quick access.
+- **Old URLs** → Moved to disk.
+
+---
+
+## **HTML Downloader**
+Once the URL Frontier picks a URL, the **HTML Downloader** fetches the page using **HTTP requests**.
+
+### **Handling `robots.txt` (Figure 9-9)**
+Some sites restrict crawlers using a `robots.txt` file.
+
+![image](https://github.com/user-attachments/assets/5fda3501-b951-4759-a775-0878e0fce192)
+
+
+📌 **Example (Amazon `robots.txt`)**:
+```
+User-agent: Googlebot
+Disallow: /creatorhub/*
+```
+This means **Googlebot is not allowed** to crawl `/creatorhub/`.
+
+### **Optimizations**
+1. **Distributed Crawling** – Multiple servers share the workload.
+2. **DNS Caching** – Reduce slow DNS lookups.
+3. **Locality Optimization** – Place crawlers near target websites.
+4. **Short Timeouts** – Avoid waiting for unresponsive sites.
+
+---
+
+## **Robustness & Extensibility**
+### **Ensuring Robustness**
+- **Consistent Hashing** – Distributes load evenly among crawler nodes.
+- **Crash Recovery** – Saves state to resume crawling after failure.
+- **Error Handling** – Prevents crashes due to bad HTML.
+
+### **Making Crawlers Extensible (Figure 9-10)**
+- Add new modules **without redesigning the system**.
+- Example:
+  - **PNG Downloader** → Crawls images.
+  - **Web Monitor** → Tracks copyright infringements.
+
+---
+
+## **Detecting and Avoiding Problematic Content**
+### **1. Removing Duplicate Pages**
+- **30% of web pages are duplicates**.
+- **Solution**: Use **hashing** to detect and remove them.
+
+📌 **Example**:
+- `example.com/page1`
+- `example.com/page2`
+If they have the **same hash**, they are duplicates.
+
+### **2. Avoiding Spider Traps**
+**Problem**: Some sites create **infinite loops of URLs**.
+📌 **Example**:
+```
+example.com/foo/bar/foo/bar/foo/bar/...
+```
+**Solution**:  
+- **Set max depth limit** (e.g., stop after 10 nested links).
+- **Detect abnormally large sites**.
+
+### **3. Removing Spam & Noise**
+- Many pages contain **ads, spam, junk data**.
+- **Solution**: Use **filters** to remove:
+  - Advertisements.
+  - Clickbait pages.
+
+---
+
+## **Step 4: Wrap-Up**
+### **Key Takeaways**
+- **BFS is better than DFS** for web crawling.
+- **URL Frontier manages politeness, priority, and freshness**.
+- **HTML Downloader handles page fetching & optimizations**.
+- **Duplicate detection & spam filtering improve efficiency**.
+- **Crawlers must be robust & extensible** to scale effectively.
+
+### **Additional Considerations**
+1. **JavaScript & AJAX Handling** – Some pages load dynamically.
+2. **Database Sharding** – Large crawlers use **distributed databases**.
+3. **Keeping Crawlers Stateless** – Large-scale systems should avoid dependencies.
+
+---
+
+## **Final Thoughts**
+Building a **scalable, efficient, and polite** web crawler requires:
+✅ **BFS-based traversal**  
+✅ **Smart URL scheduling**  
+✅ **Efficient storage techniques**  
+✅ **Duplicate detection & spam filtering**  
+
+🔹 **This is just one example of system design thinking.**  
+🔹 **Mastering these concepts will help in real-world applications!** 🚀  
+
+---
