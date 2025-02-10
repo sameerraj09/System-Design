@@ -83,8 +83,8 @@ The system has **two main flows**:
 4. **Workers** fetch data & update **News Feed Cache**.  
 5. Store `<post_id, user_id>` in **cache** (Figure 11-6).  
 
+![image](https://github.com/user-attachments/assets/cdc252d4-c382-45c6-a964-5efdaf88235a)
 
-![image](https://github.com/user-attachments/assets/f592791f-9851-45c2-829f-56ea045df268)
 
 ![image](https://github.com/user-attachments/assets/68bc591d-7f0c-4c8a-a436-831693d6b28d)
 
